@@ -20,10 +20,60 @@
             <label for="last-name">Please input your last name here:</label>
             <input type="text" id="last-name" required>
           </div>
-          <div class="form-group">
-            <label for="phoneNumber">Please input your phone number here:</label>
-            <input type="text" id="phone-number" required>
+          <div id="sub-form-buttons">
+            <div class="row">
+              <div class="col-md-4 px-2">
+                <button type="button" class="btn" onclick="toggleSubFormOne()">Toggle Home Address Form</button>
+              </div>
+              <div class="col-md-4 px-2">
+                <button type="button" class="btn" onclick="toggleSubFormTwo()">Toggle Work Address Form</button>
+              </div>
+              <div class="col-md-4 px-2">
+                <button type="button" class="btn" onclick="toggleSubFormThree()">Toggle Mobile Information Form</button>
+              </div>
+            </div>
           </div>
+          <div class="row">
+            <div id="home-address-form" class="hidden-start col-md-4 px-1">
+              <div class="form-group">
+                <label for="home-address">Please input your home address here:</label>
+                <input type="text" id="home-address">
+              </div>
+              <div class="form-group">
+                <label for="home-phone-number">Please input your primary home phone number here:</label>
+                <input type="text" id="home-phone-number">
+              </div>
+              <div class="form-group">
+                <label for="home-email">Please input your primary home email here:</label>
+                <input type="text" id="home-email">
+              </div>
+            </div>
+            <div id="work-address-form" class="hidden-start col-md-4 px-1">
+              <div class="form-group">
+                <label for="work-address">Please input your work address here:</label>
+                <input type="text" id="work-address">
+              </div>
+              <div class="form-group">
+                <label for="work-phone-number">Please input your primary work phone number here:</label>
+                <input type="text" id="work-phone-number">
+              </div>
+              <div class="form-group">
+                <label for="work-email">Please input your primary work email here:</label>
+                <input type="text" id="work-email">
+              </div>
+            </div>
+            <div id="extra-info-form" class="hidden-start col-md-4 px-1">
+              <div class="form-group">
+                <label for="extra-email">Please input an alternative preferred email (if you have one) here:</label>
+                <input type="text" id="extra-email">
+              </div>
+              <div class="form-group">
+                <label for="extra-phone-number">Please state any alternative phone number where we can contact you (if you have one):</label>
+                <input type="text" id="extra-phone-number">
+              </div>
+            </div>
+          </div>
+          <br>
           <button type="submit" class="btn">Add Contact</button>
         </form>
       </div>

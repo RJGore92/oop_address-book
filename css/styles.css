@@ -1,3 +1,7 @@
 .red-button {
   background-color: red;
 }
+
+.hidden-start {
+  display: none;
+}
