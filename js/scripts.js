@@ -58,7 +58,7 @@ var subFormThreeState = 0;
 function removeFromContacts(val) {
   currentAddressBook.deleteContact(val)
   console.log(val);
-  $("li#contact"+val).remove();
+  $("div#contact"+val).remove();
 }
 
 function toggleSubFormOne() {
@@ -105,6 +105,21 @@ function cleanArray(arrayIn) {
   return prunedArray;
 }
 
+function confirmValidInput(stringIn) {
+  var stringToCheck = stringIn;
+  var stringSplit = stringToCheck.split("");
+  for (var i = 0; i < stringSplit.length; i++) {
+    if (stringSplit[i] != " ") {
+      return true;
+    }
+  }
+  return false;
+}
+
+function showDetailsOfContact(id) {
+  $("div#contact-body"+id).slideToggle();
+}
+
 // User Interface logic
 
 $(document).ready(function() {
@@ -115,11 +130,12 @@ $(document).ready(function() {
     $("div#output-div").append("<div id='contact" + targetID + "' class='col-md-12'>" +
         "<div class='card px-2 py-1'>" +
           "<div class='card-heading bg-primary' id='card-header" +  targetID + "'><h3><span id='name" + targetID +"'></span></h3><div id='button"+targetID+"'><button type='button' value='"+targetID+"' onClick='removeFromContacts(this.value)'>Remove this Contact</button><br><button type='button' value='"+targetID+"' onClick='showDetailsOfContact(this.value)'>Show Details</button></div></div>" +
-          "<div class='card-body bg-muted' id='contact-body"+targetID+"'>" +
-            "<div class='row' id='contact-details" + targetID + "'></div>"
+          "<div class='card-body bg-muted hidden-start' id='contact-body"+targetID+"'>" +
+            "<div class='row' id='contact-details" + targetID + "'></div>" +
           "</div></div></div>");
     var firstNameIn = $("input#first-name").val();
     var lastNameIn = $("input#last-name").val();
+    $("span#name"+targetID).text(firstNameIn + " " + lastNameIn);
     var allContactMethods = [];
     if (subFormOneState == 1) {
       var contactMethodA = [];
@@ -131,31 +147,146 @@ $(document).ready(function() {
         $("div#contact"+targetID).remove();
         return false;
       }
+      else if (!(confirmValidInput(addressInA) || confirmValidInput(phoneNumInA) || confirmValidInput(emailInA))) {
+        alert("Please fill in the Home contact form in whatever you capacity you are comfortable with, or toggle it off if you don't wish to use it.");
+        $("div#contact"+targetID).remove();
+        return false;
+      }
       else {
-        //create append for home address here
-        if (addressInA != "") {
+        contactMethodA.push("home");
+        $("div#contact-details"+targetID).append(
+          "<div class='col-md-4' id='home-contact" + targetID +"'>"
+        );
+        if (confirmValidInput(addressInA)) {
           contactMethodA.push(addressInA);
-          //create append for home address location here
+          $("div#home-contact"+targetID).append(
+            "<h6>Home Address:</h6><br><p>" + addressInA + "</p>"
+          );
+          if (confirmValidInput(phoneNumInA) || confirmValidInput(emailInA)) {
+            $("div#home-contact"+targetID).append(
+              "<hr>"
+            );
+          }
         }
-        if (phoneNumInA != "") {
+        if(confirmValidInput(phoneNumInA)) {
           contactMethodA.push(phoneNumInA);
-          //create append for home phone number here
+          $("div#home-contact"+targetID).append(
+            "<h6>Home Phone Number:</h6><br><p>" + phoneNumInA + "</p>"
+          );
+          if (confirmValidInput(emailInA)) {
+            $("div#home-contact"+targetID).append(
+              "<hr>"
+            );
+          }
         }
-        if (emailInA != "") {
+        if (confirmValidInput(emailInA)) {
           contactMethodA.push(emailInA);
-          //create append for home email location here
+          $("div#home-contact"+targetID).append(
+            "<h6>Home E-mail Address:</h6><br><p>" + emailInA + "</p>"
+          );
         }
-        //push home contact info to overall contact method array from here
+        $("input#home-address").val("");
+        $("input#home-phone-number").val("");
+        $("input#home-email").val("");
+        allContactMethods.push(contactMethodA);
+      }
+    }
+    if (subFormTwoState == 1) {
+      var contactMethodB = [];
+      var addressInB = $("input#work-address").val();
+      var phoneNumInB = $("input#work-phone-number").val();
+      var emailInB = $("input#work-email").val();
+      if (addressInB == "" && phoneNumInB == "" && emailInB == "") {
+        alert("Please fill in the work contact form in whatever you capacity you are comfortable with, or toggle it off if you don't wish to use it.");
+        $("div#contact"+targetID).remove();
+        return false;
+      }
+      else if (!(confirmValidInput(addressInB) || confirmValidInput(phoneNumInB) || confirmValidInput(emailInB))) {
+        alert("Please fill in the work contact form in whatever you capacity you are comfortable with, or toggle it off if you don't wish to use it.");
+        $("div#contact"+targetID).remove();
+        return false;
+      }
+      else {
+        contactMethodB.push("work");
+        $("div#contact-details"+targetID).append(
+          "<div class='col-md-4' id='work-contact" + targetID +"'>"
+        );
+        if (confirmValidInput(addressInB)) {
+          contactMethodB.push(addressInB);
+          $("div#work-contact"+targetID).append(
+            "<h6>Work Address:</h6><br><p>" + addressInB + "</p>"
+          );
+          if (confirmValidInput(phoneNumInB) || confirmValidInput(emailInB)) {
+            $("div#work-contact"+targetID).append(
+              "<hr>"
+            );
+          }
+        }
+        if(confirmValidInput(phoneNumInB)) {
+          contactMethodB.push(phoneNumInB);
+          $("div#work-contact"+targetID).append(
+            "<h6>Work Phone Number:</h6><br><p>" + phoneNumInB + "</p>"
+          );
+          if (confirmValidInput(emailInB)) {
+            $("div#work-contact"+targetID).append(
+              "<hr>"
+            );
+          }
+        }
+        if (confirmValidInput(emailInB)) {
+          contactMethodB.push(emailInB);
+          $("div#work-contact"+targetID).append(
+            "<h6>Work E-mail Address:</h6><br><p>" + emailInB + "</p>"
+          );
+        }
+        $("input#work-address").val("");
+        $("input#work-phone-number").val("");
+        $("input#work-email").val("");
+        allContactMethods.push(contactMethodB);
       }
 
     }
-    //repeat above if statements twice, once each for work contact and extra contact below here
-    var contactMethodB = [];
-    var contactMethodC = [];
+    if (subFormThreeState == 1) {
+      var contactMethodC = [];
+      var phoneNumInC = $("input#extra-phone-number").val();
+      var emailInC = $("input#extra-email").val();
+      if (phoneNumInC == "" && emailInC == "") {
+        alert("Please fill in the external contact form in whatever you capacity you are comfortable with, or toggle it off if you don't wish to use it.");
+        $("div#contact"+targetID).remove();
+        return false;
+      }
+      else if (!(confirmValidInput(phoneNumInC) || confirmValidInput(emailInC ))) {
+        alert("Please fill in the Home contact form in whatever you capacity you are comfortable with, or toggle it off if you don't wish to use it.");
+        $("div#contact"+targetID).remove();
+        return false;
+      }
+      else {
+        contactMethodC.push("extra");
+        if(confirmValidInput(phoneNumInC)) {
+          contactMethodC.push(phoneNumInC);
+          $("div#extra-contact"+targetID).append(
+            "<h6>External Phone Number:</h6><br><p>" + phoneNumInC + "</p>"
+          );
+          if (confirmValidInput(emailInC)) {
+            $("div#work-contact"+targetID).append(
+              "<hr>"
+            );
+          }
+        }
+        if (confirmValidInput(emailInC)) {
+          contactMethodC.push(emailInC);
+          $("div#extra-contact"+targetID).append(
+            "<h6>External E-mail Address:</h6><br><p>" + emailInB + "</p>"
+          );
+        }
+        $("input#extra-phone-number").val("");
+        $("input#extra-email").val("");
+        allContactMethods.push(contactMethodC);
+      }
+    }
 
     $("input#first-name").val("");
     $("input#last-name").val("");
-    $("input#phone-number").val("");
     var contactToAdd = new Contact(firstNameIn, lastNameIn, allContactMethods);
     currentAddressBook.addContact(contactToAdd);
     // $("ul#contact-list").append(
